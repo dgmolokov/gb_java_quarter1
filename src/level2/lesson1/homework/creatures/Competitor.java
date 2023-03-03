@@ -7,7 +7,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Competitor implements CompetitorInterface {
+public class Competitor {
   private String name;
   private int maxRunDistance;
   private int maxJumpDistance;
