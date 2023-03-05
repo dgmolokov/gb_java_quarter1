@@ -28,19 +28,18 @@ public class Main {
   private static int getSumOfMatrixElements(ArrayList<List> lists) throws MyArrayDataException, MyArraySizeException {
     if (lists.size() != 4) throw new MyArraySizeException("Количество списков должно быть равно четырем!");
     int sum = 0;
-    try {
-      for (List list : lists) {
-        sum += getSumOfList(list);
-      }
-      return sum;
-    } catch (ClassCastException e) {
-      throw new MyArrayDataException("В списках найдено что-то кроме чисел!");
+    for (List list : lists) {
+      sum += getSumOfList(list);
     }
+    return sum;
   }
 
-  private static int getSumOfList(List<Integer> list) throws MyArraySizeException {
+  private static int getSumOfList(List<Integer> list) throws MyArrayDataException, MyArraySizeException {
     if (list.size() != 4) throw new MyArraySizeException("Количество элементов в списке должно быть равно четырем!");
     int sum = 0;
+    for (int i = 0; i < list.size(); i++) {
+      if (!(list.get(i) instanceof Integer)) throw new MyArrayDataException("В списках найдено что-то кроме чисел!");
+    }
     for (int i : list) {
       sum += i;
     }
