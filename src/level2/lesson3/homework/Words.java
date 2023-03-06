@@ -3,7 +3,7 @@ package level2.lesson3.homework;
 import java.util.*;
 
 public class Words {
-  private static final HashMap<String, Integer> wordsCount = new HashMap<>();
+  private static final int COUNTER = 1;
 
   public static void main(String[] args) {
     var words = new ArrayList<>(List.of(
@@ -28,9 +28,10 @@ public class Words {
   }
 
   private static HashMap<String, Integer> countWords(List<String> words) {
+    var wordsCount = new HashMap<String, Integer>();
     for (String word : words) {
-      wordsCount.computeIfPresent(word, (key, value) -> value + 1);
-      wordsCount.putIfAbsent(word, 1);
+      wordsCount.computeIfPresent(word, (key, value) -> value + COUNTER);
+      wordsCount.putIfAbsent(word, COUNTER);
     }
     return wordsCount;
   }
