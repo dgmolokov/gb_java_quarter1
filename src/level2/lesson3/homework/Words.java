@@ -23,12 +23,8 @@ public class Words {
       "Радиотелеграф",
       "Сечение"
     ));
-    System.out.println(getUniqueWords(words));
+    System.out.printf("Unique words - %s\n", Set.copyOf(words));
     System.out.println(countWords(words));
-  }
-
-  private static Set<String> getUniqueWords(List<String> words) {
-    return Set.copyOf(words);
   }
 
   private static HashMap<String, Integer> countWords(List<String> words) {
