@@ -1,0 +1,11 @@
+package level2.lesson5.examples.myRunnableTask;
+
+public class MyRunnableTask implements Runnable {
+  @Override
+  public void run() {
+    for (int i = 0; i < 5; i++) {
+      System.out.printf("Thread out: %d\n", i);
+    }
+  }
+}
+
