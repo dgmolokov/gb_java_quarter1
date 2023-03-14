@@ -10,18 +10,21 @@ public class Main {
   static final int HALF = SIZE / 2;
 
 
-  private static Float calculate(Float i) {
-    return Float.valueOf(String.valueOf(i * Math.sin(0.2f + i / 5) * Math.cos(0.2f + i / 5) * Math.cos(0.4f + i / 2)));
+  private static Double calculate(Float i) {
+    return i * Math.sin(0.2f + i / 5) * Math.cos(0.2f + i / 5) * Math.cos(0.4f + i / 2);
   }
 
 
   private static void methodA() {
     var list = new ArrayList<Float>(SIZE);
+    var resultList = new ArrayList<Double>(SIZE);
     for (int i = 0; i < SIZE; i++) {
       list.add(1.0f);
     }
     long startTime = System.currentTimeMillis();
-    list.replaceAll(Main::calculate);
+    for (Float i : list) {
+      resultList.add(calculate(i));
+    }
     System.out.printf("One thread time: %d ms.\n", System.currentTimeMillis() - startTime);
   }
 
@@ -33,14 +36,15 @@ public class Main {
     long startTime = System.currentTimeMillis();
     var subList1 = new ArrayList<>(list.subList(0, HALF));
     var subList2 = new ArrayList<>(list.subList(HALF + 1, list.size()));
+    var resultList = new ArrayList<Double>(SIZE);
     var thread1 = new Thread(() -> {
-      for (int i = 0; i < subList1.size(); i++) {
-        list.set(i, calculate(list.get(i)));
+      for (Float i : subList1) {
+        resultList.add(calculate(i));
       }
     }, "Thread 1");
     var thread2 = new Thread(() -> {
-      for (int i = 0; i < subList2.size(); i++) {
-        list.set(i, calculate(list.get(i)));
+      for (Float i : subList2) {
+        resultList.add(calculate(i));
       }
     }, "Thread 2");
     thread1.start();
@@ -51,9 +55,6 @@ public class Main {
     } catch (InterruptedException e) {
       LOGGER.log(Level.WARNING, "An error occurred while calculating the list", e);
     }
-    var resultList = new ArrayList<Float>(SIZE);
-    resultList.addAll(subList1);
-    resultList.addAll(subList2);
     System.out.printf("Two thread time: %d ms.\n", System.currentTimeMillis() - startTime);
   }
 
