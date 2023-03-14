@@ -10,8 +10,8 @@ public class Main {
   static final int HALF = SIZE / 2;
 
 
-  private static float calculate(float i) {
-    return (float) (i * Math.sin(0.2f + i / 5) * Math.cos(0.2f + i / 5) * Math.cos(0.4f + i / 2));
+  private static Float calculate(Float i) {
+    return Float.valueOf(String.valueOf(i * Math.sin(0.2f + i / 5) * Math.cos(0.2f + i / 5) * Math.cos(0.4f + i / 2)));
   }
 
 
