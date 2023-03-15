@@ -1,12 +1,18 @@
 package level3.lesson1.homework.thirdTask;
 
 import level3.lesson1.homework.thirdTask.fruits.Fruit;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Box<T extends Fruit> {
-  private final List<T> fruits = new ArrayList<>();
+  List<T> fruits = new ArrayList<>();
+
+  public Box(List<T> initialFruitList) {
+    fruits.addAll(initialFruitList);
+  }
 
   public float getWeight() {
     float sum = 0;
@@ -27,5 +33,10 @@ public class Box<T extends Fruit> {
 
   public void addFruit(T fruit) {
     fruits.add(fruit);
+  }
+
+  @Override
+  public String toString() {
+    return String.format("%d fruits, %f weight", fruits.size(), getWeight());
   }
 }
