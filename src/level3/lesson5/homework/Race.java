@@ -3,15 +3,15 @@ package level3.lesson5.homework;
 import lombok.Getter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
 @Getter
 public class Race {
-  protected static ArrayList<Car> finishedCars = new ArrayList<>();
+  protected static List<Car> finishedCars = new ArrayList<>();
   protected static int CARS_COUNT;
-  private final ArrayList<Stage> stages;
+  private final List<Stage> stages;
 
   public Race(Stage... stages) {
-    this.stages = new ArrayList<>(Arrays.asList(stages));
+    this.stages = List.of(stages);
   }
 }
