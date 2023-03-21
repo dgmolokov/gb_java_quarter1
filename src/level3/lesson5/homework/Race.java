@@ -8,6 +8,7 @@ import java.util.Arrays;
 @Getter
 public class Race {
   protected static ArrayList<Car> finishedCars = new ArrayList<>();
+  protected static int CARS_COUNT;
   private final ArrayList<Stage> stages;
 
   public Race(Stage... stages) {

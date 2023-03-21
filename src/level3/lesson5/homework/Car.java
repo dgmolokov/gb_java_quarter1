@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 @Getter
 public class Car implements Runnable {
   private static final Logger logger = Logger.getLogger(Car.class.getSimpleName());
-  private static int CARS_COUNT;
   private final CountDownLatch cdl;
   private final Race race;
   private final int speed;
@@ -19,8 +18,8 @@ public class Car implements Runnable {
     this.race = race;
     this.speed = speed;
     this.cdl = cdl;
-    CARS_COUNT++;
-    this.memberNumber = CARS_COUNT;
+    Race.CARS_COUNT++;
+    this.memberNumber = Race.CARS_COUNT;
   }
 
   @Override
