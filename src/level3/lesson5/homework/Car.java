@@ -2,8 +2,6 @@ package level3.lesson5.homework;
 
 import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -11,14 +9,13 @@ import java.util.logging.Logger;
 @Getter
 public class Car implements Runnable {
   private static final Logger logger = Logger.getLogger(Car.class.getSimpleName());
-  protected static ArrayList<Car> finishedCars = new ArrayList<>();
   private static int CARS_COUNT;
   private final CountDownLatch cdl;
-  private final List<Stage> race;
+  private final Race race;
   private final int speed;
   private final int memberNumber;
 
-  public Car(List<Stage> race, int speed, CountDownLatch cdl) {
+  public Car(Race race, int speed, CountDownLatch cdl) {
     this.race = race;
     this.speed = speed;
     this.cdl = cdl;
@@ -28,6 +25,7 @@ public class Car implements Runnable {
 
   @Override
   public void run() {
+    var stages = race.getStages();
     try {
       System.out.printf("%s готовится\n", this);
       Thread.sleep(500 + (int) (Math.random() * 800));
@@ -38,10 +36,10 @@ public class Car implements Runnable {
     } catch (InterruptedException e) {
       logger.log(Level.WARNING, e.getMessage(), e);
     }
-    for (Stage stage : race) {
+    for (Stage stage : stages) {
       stage.go(this);
     }
-    finishedCars.add(this);
+    Race.finishedCars.add(this);
   }
 
   @Override

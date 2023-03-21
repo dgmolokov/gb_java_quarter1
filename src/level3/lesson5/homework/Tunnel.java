@@ -29,7 +29,7 @@ public class Tunnel implements Stage {
         smp.release();
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      logger.log(Level.WARNING, e.getMessage(), e);
     }
   }
 

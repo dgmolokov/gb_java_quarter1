@@ -1,7 +1,6 @@
 package level3.lesson5.homework;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
@@ -16,7 +15,7 @@ public class Main {
     System.out.println("ВАЖНОЕ ОБЪЯВЛЕНИЕ >>> Подготовка!!!");
     var cdl = new CountDownLatch(CARS_COUNT);
     var smp = new Semaphore(TUNNEL_CAPACITY);
-    var race = List.of(new Road(60), new Tunnel(80, smp), new Road(40));
+    var race = new Race(new Road(60), new Tunnel(80, smp), new Road(40));
     var cars = new ArrayList<Car>(CARS_COUNT);
     for (int i = 0; i < CARS_COUNT; i++) {
       cars.add(new Car(race, 20 + (int) (Math.random() * 10), cdl));
@@ -27,13 +26,13 @@ public class Main {
     try {
       cdl.await();
       System.out.println("ВАЖНОЕ ОБЪЯВЛЕНИЕ >>> Гонка началась!!!");
-      while (Car.finishedCars.size() != CARS_COUNT) {
+      while (Race.finishedCars.size() != CARS_COUNT) {
         Thread.sleep(1000);
       }
     } catch (InterruptedException e) {
       logger.log(Level.WARNING, e.getMessage(), e);
     }
-    System.out.printf("ВАЖНОЕ ОБЪЯВЛЕНИЕ >>> Гонка закончилась!!! Победитель - %s", Car.finishedCars.get(0));
+    System.out.printf("ВАЖНОЕ ОБЪЯВЛЕНИЕ >>> Гонка закончилась!!! Победитель - %s", Race.finishedCars.get(0));
   }
 }
 
