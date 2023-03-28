@@ -13,16 +13,12 @@ public class TestApp {
   public static void main(String[] args) {
     try {
       start(Tests.class);
-    } catch (InvocationTargetException e) {
-      logger.log(Level.WARNING, "invoke don't have access to callable method!", e);
-    } catch (IllegalAccessException e) {
-      logger.log(Level.WARNING, String.format("invoked method has thrown %s exception!", e.getCause()), e);
     } catch (RuntimeException e) {
       logger.log(Level.WARNING, e.getMessage(), e);
     }
   }
 
-  private static void start(Class<?> testClass) throws InvocationTargetException, IllegalAccessException, RuntimeException {
+  private static void start(Class<?> testClass) throws RuntimeException {
     var methods = testClass.getMethods();
     var testsWithPriorities = new HashMap<Method, Integer>();
     Method beforeSuiteMethod = null;
@@ -55,7 +51,7 @@ public class TestApp {
         throw new RuntimeException("testClass must contain one '@BeforeSuite method'");
       }
 
-      for (int i = 10; i > 0; i--) {
+      for (int i = Test.MAX_PRIORITY; i >= Test.MIN_PRIORITY; i--) {
         for (Map.Entry<Method, Integer> testsEntry : testsWithPriorities.entrySet()) {
           if (testsEntry.getValue() == i) testsEntry.getKey().invoke(instance);
         }
@@ -66,7 +62,13 @@ public class TestApp {
       } else {
         throw new RuntimeException("testClass must contain one '@AfterSuite method'");
       }
-    } catch (InstantiationException | NoSuchMethodException e) {
+    } catch (InvocationTargetException e) {
+      logger.log(Level.WARNING, "invoke don't have access to callable method!", e);
+    } catch (InstantiationException e) {
+      logger.log(Level.WARNING, e.getMessage(), e);
+    } catch (IllegalAccessException e) {
+      logger.log(Level.WARNING, String.format("invoked method has thrown %s exception!", e.getCause()), e);
+    } catch (NoSuchMethodException e) {
       logger.log(Level.WARNING, e.getMessage(), e);
     }
   }
