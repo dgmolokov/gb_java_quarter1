@@ -27,26 +27,20 @@ public class TestApp {
       if (method.getAnnotation(Test.class) != null) {
         testsWithPriorities.put(method, method.getAnnotation(Test.class).priority());
       }
-      if (method.getAnnotation(BeforeSuite.class) != null && beforeSuiteMethod == null) {
-        beforeSuiteMethod = method;
+      if (method.getAnnotation(BeforeSuite.class) != null) {
+        if (beforeSuiteMethod == null) beforeSuiteMethod = method;
+        else throw new RuntimeException("Testing class must contain only one '@BeforeSuite method!'");
       }
-      if (method.getAnnotation(AfterSuite.class) != null && afterSuiteMethod == null) {
-        afterSuiteMethod = method;
-      }
-      if ((method.getAnnotation(BeforeSuite.class) != null && beforeSuiteMethod != null) &&
-        (method.getAnnotation(AfterSuite.class) != null && afterSuiteMethod != null)) {
-        throw new RuntimeException("testClass must contain only one '@BeforeSuite' and only one '@AfterSuite' methods!");
+      if (method.getAnnotation(AfterSuite.class) != null) {
+        if (afterSuiteMethod == null) afterSuiteMethod = method;
+        else throw new RuntimeException("Testing class must contain only one '@AfterSuite method!'");
       }
     }
 
     try {
       var instance = testClass.getConstructor().newInstance();
       executeServiceMethod(beforeSuiteMethod, instance);
-      for (int i = Test.MAX_PRIORITY; i >= Test.MIN_PRIORITY; i--) {
-        for (Map.Entry<Method, Integer> testsEntry : testsWithPriorities.entrySet()) {
-          if (testsEntry.getValue() == i) testsEntry.getKey().invoke(instance);
-        }
-      }
+      runTests(testsWithPriorities, instance);
       executeServiceMethod(afterSuiteMethod, instance);
     } catch (InvocationTargetException e) {
       logger.log(Level.WARNING, "invoke don't have access to callable method!", e);
@@ -64,6 +58,14 @@ public class TestApp {
       method.invoke(instance);
     } else {
       throw new RuntimeException("testClass must contain one '@BeforeSuite' and one '@AfterSuite' methods!");
+    }
+  }
+
+  private static void runTests(HashMap<Method, Integer> testsWithPriorities, Object instance) throws InvocationTargetException, IllegalAccessException {
+    for (int i = Test.MAX_PRIORITY; i >= Test.MIN_PRIORITY; i--) {
+      for (Map.Entry<Method, Integer> testsEntry : testsWithPriorities.entrySet()) {
+        if (testsEntry.getValue() == i) testsEntry.getKey().invoke(instance);
+      }
     }
   }
 }
